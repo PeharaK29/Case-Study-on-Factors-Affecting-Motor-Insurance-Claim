@@ -1,0 +1,61 @@
+---
+title: "FAMD 5"
+author: "K.L.G.P.Kasundi SC/2020/11793"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(FactoMineR)
+library(factoextra)
+library(readxl)
+```
+
+```{r}
+Claim_5 <- read_excel("E:/Documents/PEHARA/Uni/3rd Year/Semester 1/Case Study II (MFM3151)/Claim N&C.xlsx")
+head(Claim_5)
+```
+```{r}
+res.famd.5 <- FAMD(Claim_5, 
+                 sup.var = 1,  ## Set the target variable "Churn" as a supplementary variable, so it is not included in the analysis for now
+                 graph = FALSE, 
+                 ncp=5)
+res.famd.5
+```
+
+```{r}
+res.famd.5$eig
+```
+
+```{r}
+res.famd.5$var
+```
+
+```{r}
+fviz_screeplot(res.famd.5)
+```
+```{r}
+pcs_claim_famd.5 <- as.data.frame(res.famd.5$ind$coord)
+ols.data_claim_famd.5 <- cbind(Claim_5$Claim, pcs_claim_famd.5)
+ols.data_claim_famd.5
+Dependent_claim_famd.5 <- ols.data_claim_famd.5[, 1]  # Dependent variable
+Independent_claim_famd.5 <- ols.data_claim_famd.5[, 2:6]  # Independent variables
+```
+
+```{r}
+lmodel_claim_famd.5 <- lm(Dependent_claim_famd.5 ~ ., data = Independent_claim_famd.5)
+lmodel_claim_famd.5
+```
+
+```{r}
+summary(lmodel_claim_famd.5)
+```
+
+```{r}
+
+```
+
